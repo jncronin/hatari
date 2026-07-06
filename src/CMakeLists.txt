@@ -391,3 +391,16 @@ else()
 		install(FILES ${TOS_IMG_FILE} DESTINATION ${DATADIR})
 	endif(TOS_IMG_FILE)
 endif(ENABLE_OSX_BUNDLE)
+
+if(GAMEKID)
+	target_link_libraries(${APP_NAME}
+		SDL2
+		GKGL
+		GL
+	)
+
+	target_sources(${APP_NAME}
+	PRIVATE
+		${CMAKE_CURRENT_LIST_DIR}/dummy_cpp.cpp	
+	)
+endif()
