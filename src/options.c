@@ -1959,13 +1959,18 @@ bool Opt_ParseParameters(int argc, const char * const argv[], int *exitval)
 			break;
 
 		case OPT_MEMSTATE:
-			ok = Opt_StrCpy(OPT_MEMSTATE, CHECK_FILE, ConfigureParams.Memory.szMemoryCaptureFileName,
+			ok = Opt_StrCpy(OPT_MEMSTATE, CHECK_NONE, ConfigureParams.Memory.szMemoryCaptureFileName,
 					arg, sizeof(ConfigureParams.Memory.szMemoryCaptureFileName),
 					NULL);
 			if (ok)
 			{
-				bLoadMemorySave = true;
-				bLoadAutoSave = false;
+				struct stat st;
+				if(stat(ConfigureParams.Memory.szMemoryCaptureFileName, &st) == 0 &&
+					S_ISREG(st.st_mode))
+				{
+					bLoadMemorySave = true;
+					bLoadAutoSave = false;
+				}
 			}
 			break;
 
