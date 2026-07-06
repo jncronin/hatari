@@ -26,6 +26,7 @@ const char Keymap_fileid[] = "Hatari keymap.c";
 #include "tos.h"
 #include "debugui.h"
 #include "log.h"
+#include "memorySnapShot.h"
 
 #if ENABLE_SDL3
 #include <SDL3/SDL_oldnames.h>
@@ -822,6 +823,32 @@ void Keymap_KeyDown(SDL_Keymod modkey, SDL_Keycode symkey, SDL_Scancode scancode
 
 	LOG_TRACE(TRACE_KEYMAP, "key down: sym=%i scan=%i mod=0x%x name='%s'\n",
 	          symkey, scancode, modkey, Keymap_GetKeyName(symkey));
+
+#ifdef __GAMEKID__
+	/* Handle GK special keys */
+	if(scancode >= 360 && scancode < 370)
+	{
+		char tmpname[sizeof(ConfigureParams.Memory.szMemoryCaptureFileName) + 64];
+		snprintf(tmpname, sizeof(tmpname), "%s-%d.state",
+			ConfigureParams.Memory.szMemoryCaptureFileName, scancode - 360);
+		tmpname[sizeof(tmpname) - 1] = 0;
+		MemorySnapShot_Capture(tmpname, false);
+		return;
+	}
+	if(scancode >= 370 && scancode < 380)
+	{
+		char tmpname[sizeof(ConfigureParams.Memory.szMemoryCaptureFileName) + 64];
+		snprintf(tmpname, sizeof(tmpname), "%s-%d.state",
+			ConfigureParams.Memory.szMemoryCaptureFileName, scancode - 370);
+		tmpname[sizeof(tmpname) - 1] = 0;
+		MemorySnapShot_Restore(tmpname, false);
+		return;
+	}
+	if(scancode == 382)
+	{
+		MemorySnapShot_Capture(ConfigureParams.Memory.szMemoryCaptureFileName, false);
+	}
+#endif
 
 	if (symkey != SDLK_UNKNOWN)
 	{
