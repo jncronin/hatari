@@ -56,6 +56,35 @@ static long double *fp_nan    = (long double *)xhex_nan;
 #else
 static uae_u32 dhex_nan[]   ={0xffffffff, 0x7fffffff};
 static double *fp_nan    = (double *)dhex_nan;
+
+#ifdef __GAMEKID__
+#define rintl rint
+#define frexpl frexp
+#define truncl trunc
+#define fmodl fmod
+#define roundl round
+#define remainderl remainder
+#define ldexpl ldexp
+#define sinhl sinh
+#define sqrtl sqrt
+#define log1pl log1p
+#define expm1l expm1
+#define tanhl tanh
+#define tanl tan
+#define atanl atan
+#define atanhl atanh
+#define sinl sin
+#define asinl asin
+#define expl exp
+#define powl pow
+#define logl log
+#define log10l log10
+#define log2l log2
+#define coshl cosh
+#define acosl acos
+#define cosl cos
+#endif
+
 #endif
 static const double twoto32 = 4294967296.0;
 
